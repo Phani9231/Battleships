@@ -95,7 +95,10 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def checkShip(grid, ship):
-    return
+    for i in range(len(ship)):
+        if grid[i[0]][i[1]]!=1:
+            return False
+    return True
 
 
 '''

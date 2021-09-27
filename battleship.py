@@ -1,7 +1,7 @@
 """
 Battleship Project
-Name:
-Roll No:
+Name: Phanindra Gupta
+Roll No: 2021-IIITH-C1-017
 """
 
 import battleship_tests as test
@@ -62,7 +62,15 @@ Parameters: int ; int
 Returns: 2D list of ints
 '''
 def emptyGrid(rows, cols):
-    return
+    Grid=[]
+    for i in range(rows):
+        col=[]
+        for j in range(cols):
+            col.append(1)
+        Grid.append(col)
+    print(Grid)
+    return Grid
+    
 
 
 '''
@@ -71,6 +79,13 @@ Parameters: no parameters
 Returns: 2D list of ints
 '''
 def createShip():
+    row=random.randrange(1,8)
+    col=random.randrange(1,8)
+    ship=random.randrange(0,1)
+    if ship == 0:
+        return [[row-1,col],[row,col],[row+1, col]]
+    else:
+        return [[row,col-1],[row,col],[row,col+1]]
     return
 
 

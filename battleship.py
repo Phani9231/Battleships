@@ -70,6 +70,7 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
+ 
 
 
 '''

@@ -96,7 +96,9 @@ Returns: bool
 '''
 def checkShip(grid, ship):
     for i in range(len(ship)):
-        if grid[i[0]][i[1]]!=1:
+        x=ship[i][0]
+        y=ship[i][1]
+        if grid[x][y]!=1:
             return False
     return True
 

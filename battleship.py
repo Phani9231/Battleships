@@ -102,6 +102,7 @@ def checkShip(grid, ship):
             return False
     return True
 
+"""2 variable are being used for easy readibility"""
 
 '''
 addShips(grid, numShips)

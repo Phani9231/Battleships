@@ -25,6 +25,13 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def makeModel(data):
+    data["rows"]=10
+    data["cols"]=10
+    data["Board_Size"]=500
+    data["CellSize"]=50
+    data["numShips"]=5
+    data["User_Board"]=emptyGrid(10,10)
+    data["Comp_Board"]=emptyGrid(10,10)
     return
 
 
@@ -300,6 +307,7 @@ if __name__ == "__main__":
 
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
+
 
     
 

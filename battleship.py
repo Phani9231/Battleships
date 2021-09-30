@@ -101,6 +101,7 @@ def checkShip(grid, ship):
             return False
     return True
 
+
 '''
 addShips(grid, numShips)
 Parameters: 2D list of ints ; int

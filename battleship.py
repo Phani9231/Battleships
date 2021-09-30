@@ -28,10 +28,10 @@ def makeModel(data):
     data["rows"]=10
     data["cols"]=10
     data["Board_Size"]=500
-    data["CellSize"]=50
+    data["cellsize"]=50
     data["numShips"]=5
     data["User_Board"]=emptyGrid(10,10)
-    data["Comp_Board"]=emptyGrid(10,10)
+    data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
     return
 
 
@@ -41,6 +41,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
+    userCanvas=drawGrid(data, userCanvas, data["User_Board"], True)
+    compCanvas=drawGrid(data, compCanvas, data["Comp_Board"], True)
     return
 
 
@@ -133,6 +135,12 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; 2D list of ints ; boo
 Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
+    for i in range(data["rows"]):
+        for j in range(data["cols"]):
+            if grid[i][j]== SHIP_UNCLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="yellow")
+            else:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
     return
 
 

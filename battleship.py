@@ -70,7 +70,6 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
-    
 
 
 '''
@@ -284,5 +283,7 @@ def runSimulation(w, h):
 # This code runs the test cases to check your work
 if __name__ == "__main__":
 
+    test.testEmptyGrid()
+
     ## Finally, run the simulation to test it manually ##
-    runSimulation(500, 500)
+    #runSimulation(500, 500)

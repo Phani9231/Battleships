@@ -70,7 +70,6 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
- 
 
 
 '''
@@ -79,6 +78,13 @@ Parameters: no parameters
 Returns: 2D list of ints
 '''
 def createShip():
+    row=random.randrange(1,8)
+    col=random.randrange(1,8)
+    ship=random.randrange(0,1)
+    if ship == 0:
+        return [[row-1,col],[row,col],[row+1, col]]
+    else:
+        return [[row,col-1],[row,col],[row,col+1]]
     return
 
 

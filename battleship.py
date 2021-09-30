@@ -94,7 +94,12 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def checkShip(grid, ship):
-    return
+    for i in range(len(ship)):
+        x=ship[i][0]
+        y=ship[i][1]
+        if grid[x][y]!=1:
+            return False
+    return True
 
 
 '''
@@ -286,4 +291,5 @@ if __name__ == "__main__":
     test.testEmptyGrid()
 
     ## Finally, run the simulation to test it manually ##
-    #runSimulation(500, 500)
+
+    runSimulation(500, 500)

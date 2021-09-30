@@ -79,7 +79,6 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
-    
 
 
 '''
@@ -111,6 +110,7 @@ def checkShip(grid, ship):
             return False
     return True
 
+
 '''
 addShips(grid, numShips)
 Parameters: 2D list of ints ; int
@@ -135,6 +135,12 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; 2D list of ints ; boo
 Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
+    for i in range(data["rows"]):
+        for j in range(data["cols"]):
+            if grid[i][j]== SHIP_UNCLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="yellow")
+            else:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
     return
 
 
@@ -307,7 +313,10 @@ def runSimulation(w, h):
 if __name__ == "__main__":
     
 
+    test.testEmptyGrid()
+
     ## Finally, run the simulation to test it manually ##
+
     runSimulation(500, 500)
 
 

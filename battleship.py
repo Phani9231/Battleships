@@ -30,7 +30,7 @@ def makeModel(data):
     data["Board_Size"]=500
     data["cellsize"]=50
     data["numShips"]=5
-    data["User_Board"]=test.testGrid()
+    data["User_Board"]=emptyGrid(10,10)
     data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
     return
 

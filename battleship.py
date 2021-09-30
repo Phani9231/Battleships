@@ -70,7 +70,6 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
-    
 
 
 '''
@@ -102,7 +101,6 @@ def checkShip(grid, ship):
             return False
     return True
 
-"""2 variable are being used for easy readibility"""
 
 '''
 addShips(grid, numShips)
@@ -110,7 +108,16 @@ Parameters: 2D list of ints ; int
 Returns: 2D list of ints
 '''
 def addShips(grid, numShips):
-    return
+    k=0
+    while k<numShips:
+        ship=createShip()
+        if checkShip(grid,ship)==True:
+            for i in range(len(ship)):
+                x=ship[i][0]
+                y=ship[i][1]
+                grid[x][y]=2
+            k+=1
+    return grid
 
 
 '''
@@ -289,7 +296,13 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
+    
+
+    test.testEmptyGrid()
 
     ## Finally, run the simulation to test it manually ##
+
     runSimulation(500, 500)
+
     
+

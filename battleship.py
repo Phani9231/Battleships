@@ -30,9 +30,9 @@ def makeModel(data):
     data["Board_Size"]=500
     data["cellsize"]=50
     data["numShips"]=5
-    data["User_Board"]=emptyGrid(10,10)
+    data["User_Board"]=test.testGrid()#emptyGrid(10,10)
     data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
-    return
+    
 
 
 '''
@@ -95,7 +95,7 @@ def createShip():
         return [[row-1,col],[row,col],[row+1, col]]
     else:
         return [[row,col-1],[row,col],[row,col+1]]
-    return
+    
 
 
 '''

@@ -45,8 +45,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
-    userCanvas=drawGrid(data, userCanvas, data["User_Board"], True)
-    compCanvas=drawGrid(data, compCanvas, data["Comp_Board"], True)
+    drawGrid(data, userCanvas, data["User_Board"], True)
+    drawGrid(data, compCanvas, data["Comp_Board"], True)
     drawShip(data,userCanvas,data["temp_ships"])
     return
 
@@ -186,8 +186,8 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    x=event.x//data["CellSize"]
-    y=event.y//data["CellSize"]
+    x=int(event.x/data["cellsize"])
+    y=int(event.y/data["cellsize"])
     return [y,x]
 
 
@@ -197,8 +197,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
 Returns: None
 '''
 def drawShip(data, canvas, ship):
-    for i in range(len(ship)):
-        canvas.create_rectangle(data["cellsize"]*(ship[i][1]), data["cellsize"]*(ship[i][0]), data["cellsize"]*(ship[i][1]+1), data["cellsize"]*(ship[i][0]+1), fill="white")
+    for i in ship:
+        canvas.create_rectangle(data["cellsize"]*(i[1]), data["cellsize"]*(i[0]), data["cellsize"]*(i[1]+1), data["cellsize"]*(i[0]+1), fill="white")
     return
 
 
@@ -220,9 +220,9 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def placeShip(data):
-    if shipIsValid(data["user_board"], data["temp_ships"]):
+    if shipIsValid(data["User_Board"], data["temp_ships"]):
         for i in data["temp_ships"]:
-            data["user_board"][i[0]][i[1]]=SHIP_UNCLICKED
+            data["User_Board"][i[0]][i[1]]=SHIP_UNCLICKED
         data["user_track"]+=1
     else:
         print("error : ship is invalid")
@@ -237,15 +237,17 @@ Returns: None
 '''
 def clickUserBoard(data, row, col):
     if data["user_track"]==5:
-        print("you can start the game")
+        print("You can start the Game")
         return
     for i in data["temp_ships"]:
-        if[row,col]==i:
+        if [row,col]==i:
             return
     data["temp_ships"].append([row,col])
     if len(data["temp_ships"])==3:
         placeShip(data)
     return
+
+    
 
 
 ### WEEK 3 ###

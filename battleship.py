@@ -29,8 +29,10 @@ def makeModel(data):
     data["cols"]=10
     data["Board_Size"]=500
     data["cellsize"]=50
+    data["user_ships"]=5
+    data["comp_ships"]=5
     data["numShips"]=5
-    data["User_Board"]=test.testGrid()#emptyGrid(10,10)
+    data["User_Board"]=emptyGrid(10,10) #test.testGrid() 
     data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
     
 
@@ -178,7 +180,9 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    return
+    x=event.x//data["CellSize"]
+    y=event.y//data["CellSize"]
+    return [y,x]
 
 
 '''
@@ -323,6 +327,9 @@ if __name__ == "__main__":
 
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
+    
+    
+
 
 
     

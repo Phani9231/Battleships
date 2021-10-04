@@ -67,7 +67,7 @@ Returns: None
 '''
 def mousePressed(data, event, board):
     mouse = getClickedCell(data,event)
-    if board=="user":
+    if board="user":
         clickUserBoard(data,mouse[0],mouse[1])
     return
 

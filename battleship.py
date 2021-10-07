@@ -239,9 +239,8 @@ def clickUserBoard(data, row, col):
     if data["user_track"]==5:
         print("You can start the Game")
         return
-    for i in data["temp_ships"]:
-        if [row,col]==i:
-            return
+    if [row,col] in data["temp_ships"]:
+        return
     data["temp_ships"].append([row,col])
     if len(data["temp_ships"])==3:
         placeShip(data)

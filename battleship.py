@@ -69,6 +69,8 @@ def mousePressed(data, event, board):
     mouse = getClickedCell(data,event)
     if board=="user":
         clickUserBoard(data,mouse[0],mouse[1])
+    else:
+        runGameTurn(data,mouse[0],mouse[1])
     return
 
 #### WEEK 1 ####
@@ -273,6 +275,11 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def runGameTurn(data, row, col):
+    m=data["Comp_Board"]
+    if m[row][col]==SHIP_CLICKED or m[row][col]==EMPTY_CLICKED:
+        return
+    else:
+        updateboard(data,m,row,col,"user")
     return
 
 
@@ -362,7 +369,7 @@ if __name__ == "__main__":
 
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
-    #test.testUpdateBoard()
+    
     
     
 

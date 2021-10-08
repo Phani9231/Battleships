@@ -36,6 +36,7 @@ def makeModel(data):
     data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
     data["temp_ships"]=[]
     data["user_track"]=0
+    data["winner"]=None
     
 
 
@@ -48,6 +49,7 @@ def makeView(data, userCanvas, compCanvas):
     drawGrid(data, userCanvas, data["User_Board"], True)
     drawGrid(data, compCanvas, data["Comp_Board"], False)
     drawShip(data,userCanvas,data["temp_ships"])
+    drawGameOver(data, userCanvas)
     return
 
 
@@ -272,6 +274,8 @@ def updateBoard(data, board, row, col, player):
             board[row][col]=SHIP_CLICKED
         elif board[row][col]==EMPTY_UNCLICKED:
             board[row][col]=EMPTY_CLICKED
+    if isGameOver(board):
+        data["winner"]=player
     return
 
 
@@ -313,7 +317,11 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isGameOver(board):
-    return
+    for row in range(len(board)):
+        for col in range(len(board)):
+            if board[row][col]==SHIP_UNCLICKED:
+                return False
+    return True
 
 
 '''
@@ -322,7 +330,12 @@ Parameters: dict mapping strs to values ; Tkinter canvas
 Returns: None
 '''
 def drawGameOver(data, canvas):
-    return
+    if data["winner"]=="user":
+        canvas.create_text(250,50, text="Congrats! You won!", fill="black", font=("Times_New_Roman 25 bold"))
+    if data["winner"]=="comp":
+        canvas.create_text(250,50, text="You lost! Try Again!", fill="black", font=("Times_New_Roman 25 bold"))
+        return
+
 
 
 ### SIMULATION FRAMEWORK ###

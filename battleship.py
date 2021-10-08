@@ -45,8 +45,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
-    userCanvas=drawGrid(data, userCanvas, data["User_Board"], True)
-    compCanvas=drawGrid(data, compCanvas, data["Comp_Board"], True)
+    drawGrid(data, userCanvas, data["User_Board"], True)
+    drawGrid(data, compCanvas, data["Comp_Board"], True)
     drawShip(data,userCanvas,data["temp_ships"])
     return
 
@@ -87,7 +87,6 @@ def emptyGrid(rows, cols):
         Grid.append(col)
     print(Grid)
     return Grid
-    
 
 
 '''
@@ -118,6 +117,7 @@ def checkShip(grid, ship):
         if grid[x][y]!=1:
             return False
     return True
+
 
 '''
 addShips(grid, numShips)
@@ -197,8 +197,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
 Returns: None
 '''
 def drawShip(data, canvas, ship):
-    for i in range(len(ship)):
-        canvas.create_rectangle(data["cellsize"]*(ship[i][1]), data["cellsize"]*(ship[i][0]), data["cellsize"]*(ship[i][1]+1), data["cellsize"]*(ship[i][0]+1), fill="white")
+    for i in ship:
+        canvas.create_rectangle(data["cellsize"]*(i[1]), data["cellsize"]*(i[0]), data["cellsize"]*(i[1]+1), data["cellsize"]*(i[0]+1), fill="white")
     return
 
 
@@ -237,7 +237,9 @@ Returns: None
 '''
 def clickUserBoard(data, row, col):
     if data["user_track"]==5:
-        print("you can start the game")
+        print("You can start the Game")
+        return
+    if [row,col] in data["temp_ships"]:
         return
     if [row,col] in data["temp_ships"]:
         return
@@ -245,6 +247,8 @@ def clickUserBoard(data, row, col):
     if len(data["temp_ships"])==3:
         placeShip(data)
     return
+
+    
 
 
 ### WEEK 3 ###
@@ -351,7 +355,10 @@ def runSimulation(w, h):
 if __name__ == "__main__":
     
 
+    test.testEmptyGrid()
+
     ## Finally, run the simulation to test it manually ##
+
     runSimulation(500, 500)
     
     

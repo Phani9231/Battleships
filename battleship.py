@@ -37,6 +37,10 @@ def makeModel(data):
     data["Comp_Board"]=addShips(emptyGrid(10,10),data["numShips"])
     data["temp_ships"]=[]
     data["user_track"]=0
+    data["winner"]=None
+    data["max_turns"]=50
+    data["current_turns"]=0
+    return data
     
 
 
@@ -46,9 +50,10 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
-    userCanvas=drawGrid(data, userCanvas, data["User_Board"], True)
-    compCanvas=drawGrid(data, compCanvas, data["Comp_Board"], True)
+    drawGrid(data, userCanvas, data["User_Board"], True)
+    drawGrid(data, compCanvas, data["Comp_Board"], False)
     drawShip(data,userCanvas,data["temp_ships"])
+    drawGameOver(data, userCanvas)
     return
 
 
@@ -58,7 +63,9 @@ Parameters: dict mapping strs to values ; key event object
 Returns: None
 '''
 def keyPressed(data, event):
-    pass
+    if event.keysym=="Return":
+        makeModel(data)
+    return
 
 
 '''
@@ -70,6 +77,8 @@ def mousePressed(data, event, board):
     mouse = getClickedCell(data,event)
     if board=="user":
         clickUserBoard(data,mouse[0],mouse[1])
+    else:
+        runGameTurn(data,mouse[0],mouse[1])
     return
 
 #### WEEK 1 ####
@@ -148,7 +157,13 @@ def drawGrid(data, canvas, grid, showShips):
         for j in range(data["cols"]):
             if grid[i][j]== SHIP_UNCLICKED:
                 canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="yellow")
-            else:
+            elif grid[i][j]==EMPTY_UNCLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
+            elif grid[i][j]==SHIP_CLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="red")
+            elif grid[i][j]==EMPTY_CLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="white")
+            if grid[i][j]==SHIP_UNCLICKED and showShips==False:
                 canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
     return
 
@@ -187,8 +202,8 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    x=int(event.x//data["cellsize"])
-    y=int(event.y//data["cellsize"])
+    x=int(event.x/data["cellsize"])
+    y=int(event.y/data["cellsize"])
     return [y,x]
 
 
@@ -198,8 +213,8 @@ Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
 Returns: None
 '''
 def drawShip(data, canvas, ship):
-    for i in range(len(ship)):
-        canvas.create_rectangle(data["cellsize"]*(ship[i][1]), data["cellsize"]*(ship[i][0]), data["cellsize"]*(ship[i][1]+1), data["cellsize"]*(ship[i][0]+1), fill="white")
+    for i in ship:
+        canvas.create_rectangle(data["cellsize"]*(i[1]), data["cellsize"]*(i[0]), data["cellsize"]*(i[1]+1), data["cellsize"]*(i[0]+1), fill="white")
     return
 
 
@@ -209,7 +224,10 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def shipIsValid(grid, ship):
-    return
+    if len(ship)==3:
+        if checkShip(grid,ship) and (isVertical(ship) or isHorizontal(ship)):
+            return True
+    return False
 
 
 '''
@@ -218,6 +236,13 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def placeShip(data):
+    if shipIsValid(data["User_Board"], data["temp_ships"]):
+        for i in data["temp_ships"]:
+            data["User_Board"][i[0]][i[1]]=SHIP_UNCLICKED
+        data["user_track"]+=1
+    else:
+        print("error : ship is invalid")
+    data["temp_ships"]=[]
     return
 
 
@@ -227,7 +252,17 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def clickUserBoard(data, row, col):
+    if data["user_track"]==5:
+        print("You can start the Game")
+        return
+    if [row,col] in data["temp_ships"]:
+        return
+    data["temp_ships"].append([row,col])
+    if len(data["temp_ships"])==3:
+        placeShip(data)
     return
+
+    
 
 
 ### WEEK 3 ###
@@ -238,6 +273,15 @@ Parameters: dict mapping strs to values ; 2D list of ints ; int ; int ; str
 Returns: None
 '''
 def updateBoard(data, board, row, col, player):
+    i=data["Comp_Board"]
+    j=data["User_Board"]
+    if board == i or j:
+        if board[row][col]==SHIP_UNCLICKED:
+            board[row][col]=SHIP_CLICKED
+        elif board[row][col]==EMPTY_UNCLICKED:
+            board[row][col]=EMPTY_CLICKED
+    if isGameOver(board):
+        data["winner"]=player
     return
 
 
@@ -247,6 +291,16 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def runGameTurn(data, row, col):
+    l=getComputerGuess(data["User_Board"])
+    m=data["Comp_Board"]
+    if m[row][col]==SHIP_CLICKED or m[row][col]==EMPTY_CLICKED:
+        return 
+    else:
+        updateBoard(data,m,row,col,"user")
+    updateBoard(data,data["User_Board"],l[0],l[1],"comp")
+    data["current_turns"]=data["current_turns"]+1
+    if data["current_turns"]==data["max_turns"]:
+        data["winner"]="draw"
     return
 
 
@@ -256,6 +310,13 @@ Parameters: 2D list of ints
 Returns: list of ints
 '''
 def getComputerGuess(board):
+    while True:
+        row=random.randint(0,9)
+        col=random.randint(0,9)
+        if board[row][col]==SHIP_UNCLICKED or board[row][col]==EMPTY_UNCLICKED:
+
+
+            return[row,col]
     return
 
 
@@ -265,7 +326,11 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isGameOver(board):
-    return
+    for row in range(len(board)):
+        for col in range(len(board)):
+            if board[row][col]==SHIP_UNCLICKED:
+                return False
+    return True
 
 
 '''
@@ -274,7 +339,17 @@ Parameters: dict mapping strs to values ; Tkinter canvas
 Returns: None
 '''
 def drawGameOver(data, canvas):
+    if data["winner"]=="user":
+        canvas.create_text(250,50, text="Congrats! You won!", fill="black", font=("Times_New_Roman 25 bold"))
+        canvas.create_text(300,100, text="Press ENTER to play again!", fill="black", font=("Times_New_Roman 20 bold"))
+    if data["winner"]=="comp":
+        canvas.create_text(250,50, text="You lost! Try Again!", fill="black", font=("Times_New_Roman 25 bold"))
+        canvas.create_text(300,100, text="Press ENTER to play again!", fill="black", font=("Times_New_Roman 20 bold"))
+    if data["winner"]=="draw":
+        canvas.create_text(250,50, text="It's a Draw! You are out of moves!", fill="black", font=("Times_New_Roman 25 bold"))
+        canvas.create_text(300,100, text="Press ENTER to play again!", fill="black", font=("Times_New_Roman 20 bold"))
     return
+
 
 
 ### SIMULATION FRAMEWORK ###
@@ -332,8 +407,9 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
+    #test.testGetComputerGuess()
     
 
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
-    
+ 

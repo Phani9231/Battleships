@@ -37,6 +37,8 @@ def makeModel(data):
     data["temp_ships"]=[]
     data["user_track"]=0
     data["winner"]=None
+    data["max_turns"]=50
+    data["current_turns"]=0
     
 
 
@@ -292,6 +294,9 @@ def runGameTurn(data, row, col):
     else:
         updateBoard(data,m,row,col,"user")
     updateBoard(data,data["User_Board"],l[0],l[1],"comp")
+    data["current_turns"]=data["current_turns"]+1
+    if data["current_turns"]==data["max_turns"]:
+        data["winner"]="draw"
     return
 
 
@@ -334,7 +339,9 @@ def drawGameOver(data, canvas):
         canvas.create_text(250,50, text="Congrats! You won!", fill="black", font=("Times_New_Roman 25 bold"))
     if data["winner"]=="comp":
         canvas.create_text(250,50, text="You lost! Try Again!", fill="black", font=("Times_New_Roman 25 bold"))
-        return
+    if data["winner"]=="draw":
+        canvas.create_text(250,50, text="It's a Draw! You are out of moves!", fill="black", font=("Times_New_Roman 25 bold"))
+    return
 
 
 

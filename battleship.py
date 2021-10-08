@@ -46,7 +46,7 @@ Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
     drawGrid(data, userCanvas, data["User_Board"], True)
-    drawGrid(data, compCanvas, data["Comp_Board"], True)
+    drawGrid(data, compCanvas, data["Comp_Board"], False)
     drawShip(data,userCanvas,data["temp_ships"])
     return
 
@@ -149,7 +149,13 @@ def drawGrid(data, canvas, grid, showShips):
         for j in range(data["cols"]):
             if grid[i][j]== SHIP_UNCLICKED:
                 canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="yellow")
-            else:
+            elif grid[i][j]==EMPTY_UNCLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
+            elif grid[i][j]==SHIP_CLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="red")
+            elif grid[i][j]==EMPTY_CLICKED:
+                canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="white")
+            if grid[i][j]==SHIP_UNCLICKED and showShips==False:
                 canvas.create_rectangle(data["cellsize"]*j, data["cellsize"]*i, data["cellsize"]*(j+1), data["cellsize"]*(i+1), fill="blue")
     return
 
@@ -277,9 +283,9 @@ Returns: None
 def runGameTurn(data, row, col):
     m=data["Comp_Board"]
     if m[row][col]==SHIP_CLICKED or m[row][col]==EMPTY_CLICKED:
-        return
+        return 
     else:
-        updateboard(data,m,row,col,"user")
+        updateBoard(data,m,row,col,"user")
     return
 
 

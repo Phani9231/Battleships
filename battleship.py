@@ -187,8 +187,8 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    x=int(event.x/data["cellsize"])
-    y=int(event.y/data["cellsize"])
+    x=int(event.x//data["cellsize"])
+    y=int(event.y//data["cellsize"])
     return [y,x]
 
 
@@ -209,10 +209,7 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def shipIsValid(grid, ship):
-    if len(ship)==3:
-        if checkShip(grid,ship) and (isVertical(ship) or isHorizontal(ship)):
-            return True
-    return False
+    return
 
 
 '''
@@ -221,13 +218,6 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def placeShip(data):
-    if shipIsValid(data["User_Board"], data["temp_ships"]):
-        for i in data["temp_ships"]:
-            data["User_Board"][i[0]][i[1]]=SHIP_UNCLICKED
-        data["user_track"]+=1
-    else:
-        print("error : ship is invalid")
-    data["temp_ships"]=[]
     return
 
 
